@@ -18,7 +18,7 @@ function converter() {
       };
       var memoryAddress = Number(aux[1]).toString(16).toUpperCase(); // passando para hexa
 
-      while(memoryAddress.length < 8) {
+      while(memoryAddress.length < 6) {
         memoryAddress = "0" + memoryAddress;
       }
 
@@ -38,29 +38,29 @@ function converter() {
 // Map de opcodes convertidos para hexa
 var opcodeToHexa = new Map([
   ["hlt", "0x00000000"],
-  ["ld", "0x01000000"],
-  ["st", "0x02000000"],
-  ["add", "0x03000000"],
-  ["sub", "0x04000000"],
-  ["mul", "0x05000000"],
-  ["div", "0x06000000"],
-  ["lsh", "0x07000000"],
-  ["rsh", "0x08000000"],
-  ["cmp", "0x09000000"],
-  ["je", "0x0A000000"],
-  ["jne", "0x0B000000"],
-  ["jl", "0x0C000000"],
-  ["jle", "0x0D000000"],
-  ["jg", "0x0E000000"],
-  ["jge", "0x0F000000"],
-  ["jmp", "0x10000000"],
-  ["movih", "0x11000000"],
-  ["movil", "0x12000000"],
-  ["addi", "0x13000000"],
-  ["subi", "0x14000000"],
-  ["multi", "0x15000000"],
-  ["divi", "0x16000000"],
-  ["movrr", "0x17000000"],
+  ["ld", "0x01"],
+  ["st", "0x02"],
+  ["add", "0x03"],
+  ["sub", "0x04"],
+  ["mul", "0x05"],
+  ["div", "0x06"],
+  ["lsh", "0x07"],
+  ["rsh", "0x08"],
+  ["cmp", "0x09"],
+  ["je", "0x0A"],
+  ["jne", "0x0B"],
+  ["jl", "0x0C"],
+  ["jle", "0x0D"],
+  ["jg", "0x0E"],
+  ["jge", "0x0F"],
+  ["jmp", "0x10"],
+  ["movih", "0x11"],
+  ["movil", "0x12"],
+  ["addi", "0x13"],
+  ["subi", "0x14"],
+  ["multi", "0x15"],
+  ["divi", "0x16"],
+  ["movrr", "0x17"],
 ]);
 
 function submeter() {
