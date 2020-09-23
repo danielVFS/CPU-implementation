@@ -7,13 +7,26 @@
   <title>AOC</title>
 
   <link rel="stylesheet" href="style/main.css">
-  <script src="main.js" defer></script>
+  <script src="main.js"></script>
 
 </head>
 
 <body>
-  <div id="piano">
-    <h1 id="hello">test</h1>
+  <div class="container">
+    <h1 class="title">Painel de Programação</h1>
+    <div class="display">
+      <div class="painel">
+        <textarea name="textAreaOriginal" id="textAreaOriginal" placeholder="Digite seu código"></textarea>
+        <div class="espaçador"></div>
+        <textarea name="textAreaConvertido" id="textAreaConvertido" placeholder="O código convertido saíra aqui" readonly></textarea>
+      </div>
+      <div class="actions">
+        <input type="button" value="Converter" id="conversor" onclick="converter()">
+        <input type="button" value="Submeter" id="submeter" onclick="submeter()">
+      </div> 
+    </div>
+
+    <div class="tabela"><h1>Tabela</h1></div>
   </div>
 </body>
 </html>

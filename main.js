@@ -1,3 +1,10 @@
-var text = document.getElementById("hello");
+var memoria = [];
 
-text.innerHTML = "Hello"
+// função para converter o valor do textarea
+function converter() {
+  alert(2);
+}
+
+function submeter() {
+  alert(1);
+}
