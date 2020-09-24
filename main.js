@@ -22,7 +22,7 @@ function converter() {
         memoryAddress = "0" + memoryAddress;
       }
 
-      if(opcode == "0x00000000") { // no caso de ser o hlt
+      if(opcode == "00000000") { // no caso de ser o hlt
         instructionWord = opcode;
       } else {
         instructionWord = (opcode + memoryAddress); // formando a instrução
@@ -37,32 +37,45 @@ function converter() {
 
 // Map de opcodes convertidos para hexa
 var opcodeToHexa = new Map([
-  ["hlt", "0x00000000"],
-  ["ld", "0x01"],
-  ["st", "0x02"],
-  ["add", "0x03"],
-  ["sub", "0x04"],
-  ["mul", "0x05"],
-  ["div", "0x06"],
-  ["lsh", "0x07"],
-  ["rsh", "0x08"],
-  ["cmp", "0x09"],
-  ["je", "0x0A"],
-  ["jne", "0x0B"],
-  ["jl", "0x0C"],
-  ["jle", "0x0D"],
-  ["jg", "0x0E"],
-  ["jge", "0x0F"],
-  ["jmp", "0x10"],
-  ["movih", "0x11"],
-  ["movil", "0x12"],
-  ["addi", "0x13"],
-  ["subi", "0x14"],
-  ["multi", "0x15"],
-  ["divi", "0x16"],
-  ["movrr", "0x17"],
+  ["hlt", "00000000"],
+  ["ld", "01"],
+  ["st", "02"],
+  ["add", "03"],
+  ["sub", "04"],
+  ["mul", "05"],
+  ["div", "06"],
+  ["lsh", "07"],
+  ["rsh", "08"],
+  ["cmp", "09"],
+  ["je", "0A"],
+  ["jne", "0B"],
+  ["jl", "0C"],
+  ["jle", "0D"],
+  ["jg", "0E"],
+  ["jge", "0F"],
+  ["jmp", "10"],
+  ["movih", "11"],
+  ["movil", "12"],
+  ["addi", "13"],
+  ["subi", "14"],
+  ["multi", "15"],
+  ["divi", "16"],
+  ["movrr", "17"],
 ]);
 
 function submeter() {
   alert(1);
+}
+
+// ao clicar no input, adiciona o valores do input convertido em hexadecimal
+function changeMenu() {
+  var element = event.target;
+
+  var number = Number(element.value).toString(16).toUpperCase();
+  
+  while(number.length < 8) {
+    number = "0" + number;
+  }
+
+  element.value = number;
 }

@@ -64,3 +64,44 @@ textarea {
   border-radius: 5px;
 }
 
+.table {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 10px;
+  margin-top: 20px;
+  border: 1px solid #000;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.group {
+  display: flex;
+  flex-direction: row;
+
+  margin-bottom: 10px;
+  margin-right: 5px;
+}
+
+.numerator {
+  background-color: #000;
+  color: #FFF;
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 2px;
+  padding: 5px;
+}
+
+.group input {
+  width: 80px;
+  border: 1px solid #000;
+  text-align: center;
+}
