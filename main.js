@@ -1,4 +1,5 @@
 var memoria = [];
+var pc = 0;
 
 // função para converter o valor do textarea
 function converter() {
@@ -62,7 +63,8 @@ function converter() {
   document.getElementById('textAreaConvertido').value = acumulator;
 }
 
-var vetor = [];
+// contador auxiliar para gravar na memória
+var contador = 0;
 
 // Funçaõ responsável por colocar os valores convertidos para a memória
 function submeter() {
@@ -71,18 +73,37 @@ function submeter() {
 
   instructions.forEach((instruction) => {
     if(instruction != "") {
-      console.log(instruction);
+      var input = document.getElementById(`${contador}`);
+      input.value = instruction;
+      memoria[contador] = instruction;
+      contador++;
     }
   });
+
 }
 
-
+// funçaõ para preencher com 0s onde está incompleto
 function preencherBits(param, bits) {
   while(param.length < bits) {
     param = "0" + param;
   }
 
   return param;
+}
+
+// ao clicar no input, adiciona o valores do input convertido em hexadecimal
+// mostra o valor na tela e adiciona na memoria
+function changeMenu() {
+  var element = event.target;
+
+  var number = Number(element.value).toString(16).toUpperCase();
+  
+  while(number.length < 8) {
+    number = "0" + number;
+  }
+
+  element.value = number;
+  memoria[element.id] = number;
 }
 
 // Map de opcodes convertidos para hexa
@@ -124,20 +145,4 @@ var regToBin = new Map([
   ["r6", "110"],
   ["r7", "111"],
 ]);
-
-
-// ao clicar no input, adiciona o valores do input convertido em hexadecimal
-// mostra o valor na tela e adiciona na memoria
-function changeMenu() {
-  var element = event.target;
-
-  var number = Number(element.value).toString(16).toUpperCase();
-  
-  while(number.length < 8) {
-    number = "0" + number;
-  }
-
-  element.value = number;
-  memoria[element.id] = number;
-}
 
