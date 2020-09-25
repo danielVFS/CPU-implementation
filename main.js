@@ -6,6 +6,10 @@ function converter() {
   var instructions = instructionCode.toLowerCase().split("\n");
   var acumulator = "";
   var instructionWord = "";
+  var memoryAddress = "";
+  var reg1 = "";
+  var reg2 = "";
+  var nBits = "";
 
   for (const instruction of instructions) {
     if(instruction != null) {
@@ -16,16 +20,39 @@ function converter() {
         alert(`Comando inexistente:${aux[0]}`);
         return;
       };
-      var memoryAddress = Number(aux[1]).toString(16).toUpperCase(); // passando para hexa
-
-      while(memoryAddress.length < 6) {
-        memoryAddress = "0" + memoryAddress;
-      }
 
       if(opcode == "00000000") { // no caso de ser o hlt
         instructionWord = opcode;
-      } else {
+      } 
+      else if(aux[2] == null) { // em casos onde se tem apenas o opcode e a instrução
+        memoryAddress = Number(aux[1]).toString(16).toUpperCase(); // passando para hexa
+        
+        memoryAddress = preencherBits(memoryAddress, 6)
         instructionWord = (opcode + memoryAddress); // formando a instrução
+      } 
+      else {
+        if(opcode == "01" || opcode == "02") { // em caso de ser ld ou st, onde se tem um registrador
+          reg1 = regToBin.get(aux[1]);
+          memoryAddress = Number(aux[2]).toString(16).toUpperCase(); // passando para hexa
+          
+          memoryAddress = preencherBits(memoryAddress, 3)
+          instructionWord = (opcode + reg1 + memoryAddress);
+        }
+        // em casos de add, sub, mul, div, cmp
+        else if(opcode > 2 && opcode < 7 || opcode == 9){
+          reg1 = regToBin.get(aux[1]);
+          reg2 = regToBin.get(aux[2]);
+
+          instructionWord = (opcode + reg1 + reg2);
+        }
+        // em casos de lsh, rsh, movih, movil, addi, subi, muli, divi, movrr
+        else {
+          reg1 = regToBin.get(aux[1]);
+          nBits = Number(aux[2]).toString(16).toUpperCase(); // deve ser passado para o hexa ???????????
+
+          nBits = preencherBits(nBits, 3)
+          instructionWord = (opcode + reg1 + nBits);
+        }
       }
 
       acumulator = acumulator + instructionWord + "\n"; 
@@ -33,6 +60,29 @@ function converter() {
   }
 
   document.getElementById('textAreaConvertido').value = acumulator;
+}
+
+var vetor = [];
+
+// Funçaõ responsável por colocar os valores convertidos para a memória
+function submeter() {
+  var instruction = document.getElementById('textAreaConvertido').value;
+  var instructions = instruction.split("\n");
+
+  instructions.forEach((instruction) => {
+    if(instruction != "") {
+      console.log(instruction);
+    }
+  });
+}
+
+
+function preencherBits(param, bits) {
+  while(param.length < bits) {
+    param = "0" + param;
+  }
+
+  return param;
 }
 
 // Map de opcodes convertidos para hexa
@@ -63,11 +113,21 @@ var opcodeToHexa = new Map([
   ["movrr", "17"],
 ]);
 
-function submeter() {
-  alert(1);
-}
+// Map de registradores retornando o codigo binario
+var regToBin = new Map([
+  ["r0", "000"],
+  ["r1", "001"],
+  ["r2", "010"],
+  ["r3", "011"],
+  ["r4", "100"],
+  ["r5", "101"],
+  ["r6", "110"],
+  ["r7", "111"],
+]);
+
 
 // ao clicar no input, adiciona o valores do input convertido em hexadecimal
+// mostra o valor na tela e adiciona na memoria
 function changeMenu() {
   var element = event.target;
 
@@ -78,4 +138,6 @@ function changeMenu() {
   }
 
   element.value = number;
+  memoria[element.id] = number;
 }
+
