@@ -23,10 +23,47 @@
       <div class="actions">
         <input type="button" value="Converter" id="conversor" onclick="converter()">
         <input type="button" value="Submeter" id="submeter" onclick="submeter()">
+      </div>
+      <div class="cpu">
+        <h1>CPU</h1>
+        <div class="row-cpu">
+          <div>
+            <span class="numerator">RO0</span>
+            <input type="text" id="ro0" class="regs">
+          </div>
+          <div>
+            <span class="numerator">R01</span>
+            <input type="text" id="ro1" class="regs">
+          </div>
+          <div>
+            <span class="numerator">MBR</span>
+            <input type="text" id="mbr" class="regs">
+          </div>
+          <div>
+            <span class="numerator">IMM</span>
+            <input type="text" id="imm" class="regs">
+          </div>
+          <div>
+            <span class="numerator">MAR</span>
+            <input type="text" id="mar" class="regs">
+          </div>
+          <div>
+            <span class="numerator">IR</span>
+            <input type="text" id="ir" class="regs">
+          </div>
+          <div>
+            <span class="numerator">PC</span>
+            <input type="text" id="pc" class="regs">
+          </div>
+        </div>
+        <div class="button-compile">
+          <input type="button" value="Executar Instrução" id="exec" onclick="execCicle()">
+        </div>
       </div> 
     </div>
 
     <div class="table">
+      <h1 style="margin-bottom: 10px;">Memória</h1>
       <div class="row">
         <div class="group">
           <span class="numerator">00</span>
@@ -153,8 +190,302 @@
           <input type="text" id="29" placeholder="-" onblur="changeMenu()">
         </div>
       </div>
-
+      <div class="row">
+        <div class="group">
+          <span class="numerator">30</span>
+          <input type="text" id="30" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">31</span>
+          <input type="text" id="31" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">32</span>
+          <input type="text" id="32" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">33</span>
+          <input type="text" id="33" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">34</span>
+          <input type="text" id="34" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">35</span>
+          <input type="text" id="35" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">36</span>
+          <input type="text" id="36" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">37</span>
+          <input type="text" id="37" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">38</span>
+          <input type="text" id="38" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">39</span>
+          <input type="text" id="39" placeholder="-" onblur="changeMenu()">
+        </div>
       </div>
+      <div class="row">
+        <div class="group">
+          <span class="numerator">40</span>
+          <input type="text" id="40" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">41</span>
+          <input type="text" id="41" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">42</span>
+          <input type="text" id="42" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">43</span>
+          <input type="text" id="43" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">44</span>
+          <input type="text" id="44" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">45</span>
+          <input type="text" id="45" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">46</span>
+          <input type="text" id="46" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">47</span>
+          <input type="text" id="47" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">48</span>
+          <input type="text" id="48" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">49</span>
+          <input type="text" id="49" placeholder="-" onblur="changeMenu()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="group">
+          <span class="numerator">50</span>
+          <input type="text" id="50" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">51</span>
+          <input type="text" id="51" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">52</span>
+          <input type="text" id="52" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">53</span>
+          <input type="text" id="53" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">54</span>
+          <input type="text" id="54" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">55</span>
+          <input type="text" id="55" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">56</span>
+          <input type="text" id="56" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">57</span>
+          <input type="text" id="57" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">58</span>
+          <input type="text" id="58" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">59</span>
+          <input type="text" id="59" placeholder="-" onblur="changeMenu()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="group">
+          <span class="numerator">60</span>
+          <input type="text" id="60" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">61</span>
+          <input type="text" id="61" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">62</span>
+          <input type="text" id="62" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">63</span>
+          <input type="text" id="63" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">64</span>
+          <input type="text" id="64" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">65</span>
+          <input type="text" id="65" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">66</span>
+          <input type="text" id="66" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">67</span>
+          <input type="text" id="67" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">68</span>
+          <input type="text" id="68" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">69</span>
+          <input type="text" id="69" placeholder="-" onblur="changeMenu()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="group">
+          <span class="numerator">70</span>
+          <input type="text" id="70" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">71</span>
+          <input type="text" id="71" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">72</span>
+          <input type="text" id="72" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">73</span>
+          <input type="text" id="73" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">74</span>
+          <input type="text" id="74" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">75</span>
+          <input type="text" id="75" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">76</span>
+          <input type="text" id="76" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">77</span>
+          <input type="text" id="77" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">78</span>
+          <input type="text" id="78" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">79</span>
+          <input type="text" id="79" placeholder="-" onblur="changeMenu()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="group">
+          <span class="numerator">80</span>
+          <input type="text" id="80" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">81</span>
+          <input type="text" id="81" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">82</span>
+          <input type="text" id="82" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">83</span>
+          <input type="text" id="83" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">84</span>
+          <input type="text" id="84" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">85</span>
+          <input type="text" id="85" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">86</span>
+          <input type="text" id="86" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">87</span>
+          <input type="text" id="87" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">88</span>
+          <input type="text" id="88" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">89</span>
+          <input type="text" id="89" placeholder="-" onblur="changeMenu()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="group">
+          <span class="numerator">90</span>
+          <input type="text" id="90" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">91</span>
+          <input type="text" id="91" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">92</span>
+          <input type="text" id="92" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">93</span>
+          <input type="text" id="93" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">94</span>
+          <input type="text" id="94" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">95</span>
+          <input type="text" id="95" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">96</span>
+          <input type="text" id="96" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">97</span>
+          <input type="text" id="97" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">98</span>
+          <input type="text" id="98" placeholder="-" onblur="changeMenu()">
+        </div>
+        <div class="group">
+          <span class="numerator">99</span>
+          <input type="text" id="99" placeholder="-" onblur="changeMenu()">
+        </div>
+      </div>
+      
+    </div>
     </div>
   </div>
 </body>

@@ -106,6 +106,11 @@ function changeMenu() {
   memoria[element.id] = number;
 }
 
+// função para executar o ciclo da maquina
+function execCicle() {
+  alert(1);
+}
+
 // Map de opcodes convertidos para hexa
 var opcodeToHexa = new Map([
   ["hlt", "00000000"],
