@@ -6,49 +6,56 @@ function converter() {
   var instructionCode = document.getElementById("textAreaOriginal").value;
   var instructions = instructionCode.toLowerCase().split("\n");
   var acumulator = "";
-  var instructionWord = "";
-  var memoryAddress = "";
+  var instructionWord = 0;
+  var memoryAddress = 0;
+  var reg0 = "";
   var reg1 = "";
-  var reg2 = "";
   var nBits = "";
 
   for (const instruction of instructions) {
     if(instruction != null) {
       var aux = instruction.split(" ");
       var opcode = aux[0];
-      opcode = opcodeToHexa.get(opcode) ? opcodeToHexa.get(opcode) : null; // No método Map, é possivel utilizar o .get para pegar valores no array
+
+      opcode = opcodeToHexa.get(aux[0]) ? opcodeToHexa.get(aux[0]) : null; // No método Map, é possivel utilizar o .get para pegar valores no array
+      
+      opcode = opcode << 24; // deslocando;
+
       if(!opcode) {
         alert(`Comando inexistente:${aux[0]}`);
         return;
       };
-
-      if(opcode == "00000000") { // no caso de ser o hlt
-        instructionWord = opcode;
+      
+      if(opcode == "hlt") { // no caso de ser o hlt
+        instructionWord = 0; // fazendo isso devido a alguns bugs no map
       } 
       else if(aux[2] == null) { // em casos onde se tem apenas o opcode e a instrução
-        memoryAddress = Number(aux[1]).toString(16).toUpperCase(); // passando para hexa
-        
-        memoryAddress = preencherBits(memoryAddress, 6)
-        instructionWord = (opcode + memoryAddress); // formando a instrução
+        memoryAddress = parseInt(aux[1], 16); // passando para hexa
+
+        instructionWord = (opcode  + memoryAddress); // formando a instrução
       } 
       else {
-        if(opcode == "01" || opcode == "02") { // em caso de ser ld ou st, onde se tem um registrador
-          reg1 = regToBin.get(aux[1]);
-          memoryAddress = Number(aux[2]).toString(16).toUpperCase(); // passando para hexa
-          
-          memoryAddress = preencherBits(memoryAddress, 3)
-          instructionWord = (opcode + reg1 + memoryAddress);
+        // em caso de ser ld ou st, onde se tem um registrador
+        if(opcode == 0x01 << 24 || opcode == 0x02 << 24) {
+          reg0 = regToDec.get(aux[1]);
+          reg0 = reg0 << 12; // deslocando para pegar o valor do reg
+
+          memoryAddress = parseInt(aux[2], 16); // passando para hexa
+
+          console.log(`${opcode} + ${reg0} + ${memoryAddress}`);
+
+          instructionWord = (opcode | reg0 | memoryAddress);
         }
         // em casos de add, sub, mul, div, cmp
         else if(opcode > 2 && opcode < 7 || opcode == 9){
-          reg1 = regToBin.get(aux[1]);
-          reg2 = regToBin.get(aux[2]);
+          reg1 = regToDec.get(aux[1]);
+          reg2 = regToDec.get(aux[2]);
 
           instructionWord = (opcode + reg1 + reg2);
         }
         // em casos de lsh, rsh, movih, movil, addi, subi, muli, divi, movrr
         else {
-          reg1 = regToBin.get(aux[1]);
+          reg1 = regToDec.get(aux[1]);
           nBits = Number(aux[2]).toString(16).toUpperCase(); // deve ser passado para o hexa ???????????
 
           nBits = preencherBits(nBits, 3)
@@ -56,7 +63,11 @@ function converter() {
         }
       }
 
-      acumulator = acumulator + instructionWord + "\n"; 
+      // convertendo para string apenas para mostrar na tela
+      var visualInstruction = instructionWord;
+      visualInstruction = preencherBits(instructionWord.toString(16).toUpperCase(), 8);
+      acumulator = acumulator + visualInstruction + "\n";
+
     }
   }
 
@@ -85,7 +96,7 @@ function submeter() {
 // funçaõ para preencher com 0s onde está incompleto
 function preencherBits(param, bits) {
   while(param.length < bits) {
-    param = "0" + param;
+    param = 0 + param;
   }
 
   return param;
@@ -113,41 +124,40 @@ function execCicle() {
 
 // Map de opcodes convertidos para hexa
 var opcodeToHexa = new Map([
-  ["hlt", "00000000"],
-  ["ld", "01"],
-  ["st", "02"],
-  ["add", "03"],
-  ["sub", "04"],
-  ["mul", "05"],
-  ["div", "06"],
-  ["lsh", "07"],
-  ["rsh", "08"],
-  ["cmp", "09"],
-  ["je", "0A"],
-  ["jne", "0B"],
-  ["jl", "0C"],
-  ["jle", "0D"],
-  ["jg", "0E"],
-  ["jge", "0F"],
-  ["jmp", "10"],
-  ["movih", "11"],
-  ["movil", "12"],
-  ["addi", "13"],
-  ["subi", "14"],
-  ["multi", "15"],
-  ["divi", "16"],
-  ["movrr", "17"],
+  ["ld", 0x01],
+  ["st", 0x02],
+  ["add", 0x03],
+  ["sub", 0x04],
+  ["mul", 0x05],
+  ["div", 0x06],
+  ["lsh", 0x07],
+  ["rsh", 0x08],
+  ["cmp", 0x09],
+  ["je", 0x0A],
+  ["jne", 0x0B],
+  ["jl", 0x0C],
+  ["jle", 0x0D],
+  ["jg", 0x0E],
+  ["jge", 0x0F],
+  ["jmp", 0x10],
+  ["movih", 0x11],
+  ["movil", 0x12],
+  ["addi", 0x13],
+  ["subi", 0x14],
+  ["muli", 0x15],
+  ["divi", 0x16],
+  ["movrr", 0x17],
 ]);
 
 // Map de registradores retornando o codigo binario
-var regToBin = new Map([
-  ["r0", "000"],
-  ["r1", "001"],
-  ["r2", "010"],
-  ["r3", "011"],
-  ["r4", "100"],
-  ["r5", "101"],
-  ["r6", "110"],
-  ["r7", "111"],
+var regToDec = new Map([
+  ["r0,", 000],
+  ["r1,", 001],
+  ["r2,", 002],
+  ["r3,", 003],
+  ["r4,", 004],
+  ["r5,", 005],
+  ["r6,", 006],
+  ["r7,", 007],
 ]);
 

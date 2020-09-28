@@ -50,11 +50,12 @@ textarea {
 
 .actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
 }
 
 .actions input {
-  width: 48%;
+  width: 210px;
   height: 20px;
   line-height: 10px;
 
