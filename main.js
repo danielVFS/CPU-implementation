@@ -32,12 +32,14 @@ function converter() {
       else if(aux[2] == null) { // em casos onde se tem apenas o opcode e a instrução
         memoryAddress = parseInt(aux[1], 16); // passando para hexa
 
-        instructionWord = (opcode  + memoryAddress); // formando a instrução
+        instructionWord = (opcode | memoryAddress); // formando a instrução
       } 
       else {
         // em caso de ser ld ou st, onde se tem um registrador
         if(opcode == 0x01 << 24 || opcode == 0x02 << 24) {
-          reg0 = regToDec.get(aux[1]);
+          reg0 = aux[1].slice(0,2); // eliminando a virgula
+          reg0 = regToDec.get(reg0);
+          
           reg0 = reg0 << 12; // deslocando para pegar o valor do reg
 
           memoryAddress = parseInt(aux[2], 16); // passando para hexa
@@ -47,15 +49,22 @@ function converter() {
           instructionWord = (opcode | reg0 | memoryAddress);
         }
         // em casos de add, sub, mul, div, cmp
-        else if(opcode > 2 && opcode < 7 || opcode == 9){
-          reg1 = regToDec.get(aux[1]);
-          reg2 = regToDec.get(aux[2]);
+        else if(opcode > 0x02 << 24 && opcode < 0x07 << 24|| opcode == 0x09 << 24 || opcode == 0x17 << 24){
+          reg0 = aux[1].slice(0,2); // eliminando a virgula
+          reg1 = aux[2].slice(0,2); // eliminando a virgula
+          reg0 = regToDec.get(reg0);
+          reg1 = regToDec.get(reg1);
+      
+          // deslocando
+          reg0 = reg0 << 12;
+          console.log(`${opcode} + ${reg0} + ${reg1}`);
 
-          instructionWord = (opcode + reg1 + reg2);
+          instructionWord = (opcode | reg0 | reg1);
         }
         // em casos de lsh, rsh, movih, movil, addi, subi, muli, divi, movrr
         else {
-          reg1 = regToDec.get(aux[1]);
+          reg0 = aux[1].slice(0, 2); //eliminando a virgula
+          reg0 = regToDec.get(reg0);
           nBits = Number(aux[2]).toString(16).toUpperCase(); // deve ser passado para o hexa ???????????
 
           nBits = preencherBits(nBits, 3)
@@ -151,13 +160,13 @@ var opcodeToHexa = new Map([
 
 // Map de registradores retornando o codigo binario
 var regToDec = new Map([
-  ["r0,", 000],
-  ["r1,", 001],
-  ["r2,", 002],
-  ["r3,", 003],
-  ["r4,", 004],
-  ["r5,", 005],
-  ["r6,", 006],
-  ["r7,", 007],
+  ["r0", 0x0],
+  ["r1", 0x1],
+  ["r2", 0x2],
+  ["r3", 0x3],
+  ["r4", 0x4],
+  ["r5", 0x5],
+  ["r6", 0x6],
+  ["r7", 0x7],
 ]);
 
