@@ -1,9 +1,6 @@
 var memoria = [];
 var pc = 0;
 
-// contador auxiliar para gravar na memória
-var contador = 0;
-
 // mascaras
 var mascReg0 = 0xE00000;
 var mascReg1 = 0x1C0000;  
@@ -108,11 +105,14 @@ function submeter() {
   var instruction = document.getElementById('textAreaConvertido').value;
   var instructions = instruction.split("\n");
 
+  // contador auxiliar para gravar na memória
+  var contador = 0;
+
   instructions.forEach((instruction) => {
     if(instruction != "") {
       var input = document.getElementById(`${contador}`);
       input.value = instruction;
-      memoria[contador] = instruction;
+      memoria[contador] = parseInt(instruction, 16);
       contador++;
     }
     
@@ -131,16 +131,26 @@ function preencherBits(param, bits) {
 // ao clicar no input, adiciona o valores do input convertido em hexadecimal
 // mostra o valor na tela e adiciona na memoria
 function changeMenu() {
-  var element = event.target;
+  var input = event.target;
+  var visualValue; 
+  var virtualValue;
 
-  var number = Number(element.value).toString(16).toUpperCase();
-  
-  while(number.length < 8) {
-    number = "0" + number;
+  // em caso de usuário não preencher algum valor;
+  if(!input.value) {
+    visualValue = "0";
+    virtualValue = 0;
+  } 
+  else {
+    visualValue = input.value.toUpperCase();
+    virtualValue = parseInt(visualValue, 16);
   }
+  
+  console.log(`${visualValue} - ${virtualValue}`);
+  
+  visualValue = preencherBits(visualValue, 8);
 
-  element.value = number;
-  memoria[element.id] = number;
+  input.value = visualValue;
+  memoria[input.id] = virtualValue;
 }
 
 // função para executar o ciclo da maquina
