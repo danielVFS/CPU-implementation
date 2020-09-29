@@ -1,16 +1,25 @@
 var memoria = [];
 var pc = 0;
 
+// contador auxiliar para gravar na memória
+var contador = 0;
+
+// mascaras
+var mascReg0 = 0xE00000;
+var mascReg1 = 0x1C0000;  
+var mascAdress = 0x1FFFFF;
+
+// conversões OK - Testadas com sucesso
 // função para converter o valor do textarea
 function converter() {
   var instructionCode = document.getElementById("textAreaOriginal").value;
   var instructions = instructionCode.toLowerCase().split("\n");
   var acumulator = "";
-  var instructionWord = 0;
-  var memoryAddress = 0;
-  var reg0 = "";
-  var reg1 = "";
-  var nBits = "";
+  var instructionWord = "";
+  var memoryAddress = "";
+  var reg0;
+  var reg1;
+  var imm;
 
   for (const instruction of instructions) {
     if(instruction != null) {
@@ -18,19 +27,17 @@ function converter() {
       var opcode = aux[0];
 
       opcode = opcodeToHexa.get(aux[0]) ? opcodeToHexa.get(aux[0]) : null; // No método Map, é possivel utilizar o .get para pegar valores no array
-      
-      opcode = opcode << 24; // deslocando;
 
-      if(!opcode) {
-        alert(`Comando inexistente:${aux[0]}`);
-        return;
-      };
-      
-      if(opcode == "hlt") { // no caso de ser o hlt
+      opcode = opcode << 24; // deslocando 24 bits;
+
+      // no caso de ser o hlt
+      if(aux[1] == null) {
         instructionWord = 0; // fazendo isso devido a alguns bugs no map
+        console.log(instructionWord);
       } 
       else if(aux[2] == null) { // em casos onde se tem apenas o opcode e a instrução
         memoryAddress = parseInt(aux[1], 16); // passando para hexa
+        memoryAddress = memoryAddress & mascAdress;
 
         instructionWord = (opcode | memoryAddress); // formando a instrução
       } 
@@ -39,14 +46,16 @@ function converter() {
         if(opcode == 0x01 << 24 || opcode == 0x02 << 24) {
           reg0 = aux[1].slice(0,2); // eliminando a virgula
           reg0 = regToDec.get(reg0);
-          
-          reg0 = reg0 << 12; // deslocando para pegar o valor do reg
+          reg0 = reg0 << 21; // deslocando para pegar o valor do reg
+          reg0 = reg0 & mascReg0;
 
           memoryAddress = parseInt(aux[2], 16); // passando para hexa
+          memoryAddress = memoryAddress & mascAdress;
 
           console.log(`${opcode} + ${reg0} + ${memoryAddress}`);
 
           instructionWord = (opcode | reg0 | memoryAddress);
+          console.log(instructionWord);
         }
         // em casos de add, sub, mul, div, cmp
         else if(opcode > 0x02 << 24 && opcode < 0x07 << 24|| opcode == 0x09 << 24 || opcode == 0x17 << 24){
@@ -54,27 +63,38 @@ function converter() {
           reg1 = aux[2].slice(0,2); // eliminando a virgula
           reg0 = regToDec.get(reg0);
           reg1 = regToDec.get(reg1);
+
+          reg0 = reg0 + mascReg0;
+          reg1 = reg1 + mascReg1;
       
           // deslocando
-          reg0 = reg0 << 12;
+          reg0 = reg0 << 21;
+          reg1 = reg1 << 18;
+          
           console.log(`${opcode} + ${reg0} + ${reg1}`);
 
           instructionWord = (opcode | reg0 | reg1);
+          console.log(instructionWord);
         }
         // em casos de lsh, rsh, movih, movil, addi, subi, muli, divi, movrr
         else {
           reg0 = aux[1].slice(0, 2); //eliminando a virgula
           reg0 = regToDec.get(reg0);
-          nBits = Number(aux[2]).toString(16).toUpperCase(); // deve ser passado para o hexa ???????????
+          reg0 = reg0 + mascReg0;
+          reg0 = reg0 << 21;
 
-          nBits = preencherBits(nBits, 3)
-          instructionWord = (opcode + reg1 + nBits);
+          imm = parseInt(aux[2], 16); // deve ser passado para o hexa ???????????
+          imm = imm & mascAdress; // utilizando a mesma mascara do endereço de memória
+
+          instructionWord = (opcode + reg0 + imm);
         }
       }
 
       // convertendo para string apenas para mostrar na tela
       var visualInstruction = instructionWord;
       visualInstruction = preencherBits(instructionWord.toString(16).toUpperCase(), 8);
+      
+      // apenas para mostrar no text area
       acumulator = acumulator + visualInstruction + "\n";
 
     }
@@ -82,9 +102,6 @@ function converter() {
 
   document.getElementById('textAreaConvertido').value = acumulator;
 }
-
-// contador auxiliar para gravar na memória
-var contador = 0;
 
 // Funçaõ responsável por colocar os valores convertidos para a memória
 function submeter() {
@@ -98,8 +115,8 @@ function submeter() {
       memoria[contador] = instruction;
       contador++;
     }
+    
   });
-
 }
 
 // funçaõ para preencher com 0s onde está incompleto
@@ -133,6 +150,7 @@ function execCicle() {
 
 // Map de opcodes convertidos para hexa
 var opcodeToHexa = new Map([
+  ["hlt", 0x00],
   ["ld", 0x01],
   ["st", 0x02],
   ["add", 0x03],
@@ -160,13 +178,13 @@ var opcodeToHexa = new Map([
 
 // Map de registradores retornando o codigo binario
 var regToDec = new Map([
-  ["r0", 0x0],
-  ["r1", 0x1],
-  ["r2", 0x2],
-  ["r3", 0x3],
-  ["r4", 0x4],
-  ["r5", 0x5],
-  ["r6", 0x6],
-  ["r7", 0x7],
+  ["r0", 0],
+  ["r1", 1],
+  ["r2", 2],
+  ["r3", 3],
+  ["r4", 4],
+  ["r5", 5],
+  ["r6", 6],
+  ["r7", 7],
 ]);
 
