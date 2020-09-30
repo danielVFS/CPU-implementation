@@ -1,5 +1,15 @@
 var memoria = [];
 var pc = 0;
+var mbr;
+var mar;
+var ir;
+var ro0;
+var ro1;
+var imm;
+
+var e;
+var l;
+var g;
 
 // mascaras
 var mascReg0 = 0xE00000;
@@ -30,7 +40,7 @@ function converter() {
       // no caso de ser o hlt
       if(aux[1] == null) {
         instructionWord = 0; // fazendo isso devido a alguns bugs no map
-        console.log(instructionWord);
+        //console.log(instructionWord);
       } 
       else if(aux[2] == null) { // em casos onde se tem apenas o opcode e a instrução
         memoryAddress = parseInt(aux[1], 16); // passando para hexa
@@ -49,10 +59,10 @@ function converter() {
           memoryAddress = parseInt(aux[2], 16); // passando para hexa
           memoryAddress = memoryAddress & mascAdress;
 
-          console.log(`${opcode} + ${reg0} + ${memoryAddress}`);
+          //console.log(`${opcode} + ${reg0} + ${memoryAddress}`);
 
           instructionWord = (opcode | reg0 | memoryAddress);
-          console.log(instructionWord);
+          //console.log(instructionWord);
         }
         // em casos de add, sub, mul, div, cmp
         else if(opcode > 0x02 << 24 && opcode < 0x07 << 24|| opcode == 0x09 << 24 || opcode == 0x17 << 24){
@@ -68,10 +78,10 @@ function converter() {
           reg0 = reg0 << 21;
           reg1 = reg1 << 18;
           
-          console.log(`${opcode} + ${reg0} + ${reg1}`);
+          //console.log(`${opcode} + ${reg0} + ${reg1}`);
 
           instructionWord = (opcode | reg0 | reg1);
-          console.log(instructionWord);
+          //console.log(instructionWord);
         }
         // em casos de lsh, rsh, movih, movil, addi, subi, muli, divi, movrr
         else {
@@ -111,11 +121,11 @@ function submeter() {
   instructions.forEach((instruction) => {
     if(instruction != "") {
       var input = document.getElementById(`${contador}`);
+     
       input.value = instruction;
       memoria[contador] = parseInt(instruction, 16);
-      contador++;
-    }
-    
+      contador++;   
+    }   
   });
 }
 
@@ -145,7 +155,7 @@ function changeMenu() {
     virtualValue = parseInt(visualValue, 16);
   }
   
-  console.log(`${visualValue} - ${virtualValue}`);
+  //console.log(`${visualValue} - ${virtualValue}`);
   
   visualValue = preencherBits(visualValue, 8);
 
@@ -153,9 +163,38 @@ function changeMenu() {
   memoria[input.id] = virtualValue;
 }
 
-// função para executar o ciclo da maquina
-function execCicle() {
-  alert(1);
+
+/*
+  função para executar o ciclo da maquina
+  Passo a Passo:
+    1. ler a memória
+*/
+function nextInstruction() {
+  /* lendo a memória; */
+  
+  // pegando o opcode
+  ir = memoria[pc];
+  ir = ir & 0x0F000000; // mascara para pegar o opcode
+  ir = ir >> 24;
+
+  // pegando o mar
+  mar = memoria[pc] & 0x1FFFFF;
+
+  // pegando o mbr
+  mbr = memoria[mar];
+
+  // incrementando o contador pc
+  pc++;
+
+  atualizarProcessador(ir, mar, mbr, pc);
+}
+
+// atualizando o processador a cada ciclo
+function atualizarProcessador(ir, mar, mbr,pc) {
+  document.getElementById("ir").value = preencherBits(ir.toString(16).toUpperCase(), 2);
+  document.getElementById("mar").value = preencherBits(mar.toString(16).toUpperCase(), 8);
+  document.getElementById("mbr").value = preencherBits(mbr.toString(16).toUpperCase(), 8);
+  document.getElementById("pc").value = preencherBits(pc.toString(16).toUpperCase(), 6);
 }
 
 // Map de opcodes convertidos para hexa

@@ -30,35 +30,35 @@
         <div class="row-cpu">
           <div>
             <span class="numerator">RO0</span>
-            <input type="text" id="ro0" class="regs">
+            <input type="text" id="ro0" class="regs" value="000" readonly>
           </div>
           <div>
             <span class="numerator">R01</span>
-            <input type="text" id="ro1" class="regs">
+            <input type="text" id="ro1" class="regs" value="000"readonly>
           </div>
           <div>
             <span class="numerator">MBR</span>
-            <input type="text" id="mbr" class="regs">
+            <input type="text" id="mbr" class="regs" value="00000000" readonly>
           </div>
           <div>
             <span class="numerator">IMM</span>
-            <input type="text" id="imm" class="regs">
+            <input type="text" id="imm" class="regs" value="0000"readonly>
           </div>
           <div>
             <span class="numerator">MAR</span>
-            <input type="text" id="mar" class="regs">
+            <input type="text" id="mar" class="regs" value="00000000"readonly>
           </div>
           <div>
             <span class="numerator">IR</span>
-            <input type="text" id="ir" class="regs">
+            <input type="text" id="ir" class="regs" value="00" readonly>
           </div>
           <div>
             <span class="numerator">PC</span>
-            <input type="text" id="pc" class="regs">
+            <input type="text" id="pc" value="000000" class="regs" readonly>
           </div>
         </div>
         <div class="button-compile">
-          <input type="button" value="Executar Instrução" id="exec" onclick="execCicle()">
+          <input type="button" value="Executar Instrução" id="exec" onclick="nextInstruction()">
         </div>
       </div> 
     </div>
