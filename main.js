@@ -6,6 +6,16 @@ var ir;
 var ro0;
 var ro1;
 var imm;
+var acc;
+
+var r0;
+var r1;
+var r2;
+var r3;
+var r4;
+var r5;
+var r6;
+var r7;
 
 var e;
 var l;
@@ -170,31 +180,72 @@ function changeMenu() {
     1. ler a memória
 */
 function nextInstruction() {
-  /* lendo a memória; */
-  
   // pegando o opcode
   ir = memoria[pc];
-  ir = ir & 0x0F000000; // mascara para pegar o opcode
   ir = ir >> 24;
 
-  // pegando o mar
-  mar = memoria[pc] & 0x1FFFFF;
+  if(ir == 0) { //hlt
+    mbr = mar = ro0 = ir = imm = ro1 = 0;
+  } 
+  else if(ir == 1) { //ld
+    mar = memoria[pc] & 0x1FFFFF;
+    mbr = memoria[mar];
 
-  // pegando o mbr
-  mbr = memoria[mar];
+    var reg = memoria[pc] & 0xE00000;
+    var reg = reg >> 21;
+    
 
-  // incrementando o contador pc
+  }
+  else if(ir == 2) { //st
+    mar = memoria[pc] & 0x1FFFFF;
+    mbr = ro0;
+    memoria[mar] = mbr;
+
+    document.getElementById(`${mar}`).value = preencherBits(mbr.toString(16).toUpperCase(), 8);
+  }
+  else if(ir == 3) { //add
+    ro0 == "" ? ro0 = mbr : ro0 = mbr;
+  }
+
   pc++;
-
-  atualizarProcessador(ir, mar, mbr, pc);
+  atualizarProcessador(ir, mar, mbr, pc, ro0, ro1);
 }
 
 // atualizando o processador a cada ciclo
-function atualizarProcessador(ir, mar, mbr,pc) {
+function atualizarProcessador(ir, mar, mbr, pc, ro0, ro1, acc) {
   document.getElementById("ir").value = preencherBits(ir.toString(16).toUpperCase(), 2);
   document.getElementById("mar").value = preencherBits(mar.toString(16).toUpperCase(), 8);
   document.getElementById("mbr").value = preencherBits(mbr.toString(16).toUpperCase(), 8);
-  document.getElementById("pc").value = preencherBits(pc.toString(16).toUpperCase(), 6);
+  document.getElementById("pc").value = preencherBits(pc.toString(16).toUpperCase(), 8);
+  document.getElementById("ro0").value = preencherBits(ro0.toString(16).toUpperCase(), 8);
+  document.getElementById("ro1").value = preencherBits(ro1.toString(16).toUpperCase(), 8);
+}
+
+function verificarRegistrador(reg) {
+  if(reg == 0) {
+    r0 = mbr;
+  }
+  else if(reg == 1) {
+    r1 = mbr;
+  }
+  else if(reg == 2) {
+    r2 = mbr;
+  }
+  else if(reg == 3) {
+    r3 = mbr;
+  }
+  else if(reg == 4) {
+    r4 = mbr;
+  }
+  else if(reg == 5) {
+    r5 = mbr;
+  }
+  else if(reg == 6) {
+    r6 = mbr;
+  }
+  else if(reg == 7) {
+    r7 = mbr;
+  }
 }
 
 // Map de opcodes convertidos para hexa
@@ -225,7 +276,7 @@ var opcodeToHexa = new Map([
   ["movrr", 0x17],
 ]);
 
-// Map de registradores retornando o codigo binario
+// Map de registradores retornando o decimal
 var regToDec = new Map([
   ["r0", 0],
   ["r1", 1],
