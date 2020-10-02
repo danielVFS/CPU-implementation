@@ -8,14 +8,14 @@ var ro1;
 var imm;
 var acc;
 
-var r0;
-var r1;
-var r2;
-var r3;
-var r4;
-var r5;
-var r6;
-var r7;
+var r0 = 0;
+var r1 = 0;
+var r2 = 0;
+var r3 = 0;
+var r4 = 0;
+var r5 = 0;
+var r6 = 0;
+var r7 = 0;
 
 var e;
 var l;
@@ -192,13 +192,14 @@ function nextInstruction() {
     mbr = memoria[mar];
 
     var reg = memoria[pc] & 0xE00000;
-    var reg = reg >> 21;
+    reg = reg >> 21;
     
-
+    ro0 = reg;
+    verificarRegistrador(reg);
   }
   else if(ir == 2) { //st
     mar = memoria[pc] & 0x1FFFFF;
-    mbr = ro0;
+    devolverRegistrador(ro0);
     memoria[mar] = mbr;
 
     document.getElementById(`${mar}`).value = preencherBits(mbr.toString(16).toUpperCase(), 8);
@@ -212,39 +213,75 @@ function nextInstruction() {
 }
 
 // atualizando o processador a cada ciclo
-function atualizarProcessador(ir, mar, mbr, pc, ro0, ro1, acc) {
+function atualizarProcessador(ir, mar, mbr, pc, ro0, ro1) {
   document.getElementById("ir").value = preencherBits(ir.toString(16).toUpperCase(), 2);
   document.getElementById("mar").value = preencherBits(mar.toString(16).toUpperCase(), 8);
   document.getElementById("mbr").value = preencherBits(mbr.toString(16).toUpperCase(), 8);
   document.getElementById("pc").value = preencherBits(pc.toString(16).toUpperCase(), 8);
-  document.getElementById("ro0").value = preencherBits(ro0.toString(16).toUpperCase(), 8);
-  document.getElementById("ro1").value = preencherBits(ro1.toString(16).toUpperCase(), 8);
+  document.getElementById("ro0").value = preencherBits(ro0.toString(16).toUpperCase(), 3);
+  document.getElementById("ro1").value = preencherBits(ro1.toString(16).toUpperCase(), 3);
+}
+
+function devolverRegistrador(reg) {
+  console.log(reg)
+  if(reg == 0) {
+    mbr = r0;
+  }
+  else if(reg == 1) {
+    mbr = r1;
+  }
+  else if(reg == 2) {
+    mbr = r2;
+  }
+  else if(reg == 3) {
+    mbr = r3;
+  }
+  else if(reg == 4) {
+    mbr = r4;
+  }
+  else if(reg == 5) {
+    mbr = r5;
+  }
+  else if(reg == 6) {
+    mbr = r6;
+  }
+  else if(reg == 7) {
+    mbr = r7;
+  }
 }
 
 function verificarRegistrador(reg) {
   if(reg == 0) {
     r0 = mbr;
+    document.getElementById("r0").value = preencherBits(r0.toString(16).toUpperCase(), 8);
   }
   else if(reg == 1) {
     r1 = mbr;
+    document.getElementById("r1").value = preencherBits(r1.toString(16).toUpperCase(), 8);
   }
   else if(reg == 2) {
     r2 = mbr;
+    document.getElementById("r2").value = preencherBits(r2.toString(16).toUpperCase(), 8);
   }
   else if(reg == 3) {
     r3 = mbr;
+    document.getElementById("r3").value = preencherBits(r3.toString(16).toUpperCase(), 8);
   }
   else if(reg == 4) {
     r4 = mbr;
+    document.getElementById("r4").value = preencherBits(r4.toString(16).toUpperCase(), 8);
   }
   else if(reg == 5) {
     r5 = mbr;
+    document.getElementById("r5").value = preencherBits(r5.toString(16).toUpperCase(), 8);
   }
   else if(reg == 6) {
     r6 = mbr;
+    document.getElementById("r6").value = preencherBits(r6.toString(16).toUpperCase(), 8);
   }
   else if(reg == 7) {
     r7 = mbr;
+    document.getElementById("r7").value = preencherBits(r7.toString(16).toUpperCase(), 8);
   }
 }
 
