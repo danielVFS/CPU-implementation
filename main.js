@@ -309,30 +309,50 @@ function nextInstruction() {
       document.getElementById("g").value = g;
     }
     else {
-      l = 0;
+      g = 0;
       document.getElementById("g").value = g;
     }
 
   }
   else if(ir == 10){ //je
+    if(e == 1) {
+      mar = memoria[pc] & 0x1FFFFF;
+      pc = mar-1;
+    }
   }
   else if(ir == 11){ //jne
-    
+    if(e == 0) {
+      mar = memoria[pc] & 0x1FFFFF;
+      pc = mar-1;
+    }
   }
   else if(ir == 12){ //jl
-    
+    if(l == 1) {
+      mar = memoria[pc] & 0x1FFFFF;
+      pc = mar-1;
+    }
   }
   else if(ir == 13){ //jle
-    
+    if(e == 1 || l == 1) {
+      mar = memoria[pc] & 0x1FFFFF;
+      pc = mar-1;
+    }
   }
   else if(ir == 14){ //jg
-    
+    if(g == 1) {
+      mar = memoria[pc] & 0x1FFFFF;
+      pc = mar-1;
+    }
   }
   else if(ir == 15){ //jge
-    
+    if(e == 1 || g == 1) {
+      mar = memoria[pc] & 0x1FFFFF;
+      pc = mar-1;
+    } 
   }
   else if(ir == 16){ //jmp
-    
+    mar = memoria[pc] & 0x1FFFFF;
+    pc = mar-1; 
   }
   else if(ir == 17){ //movih
     
