@@ -244,8 +244,6 @@ function nextInstruction() {
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
   }
   else if(ir == 6) { //div
-    // não sei oq fazer no mar nesse caso
-
     var reg1 = memoria[pc] & 0xE00000;
     reg1 = reg1 >> 21;
     ro0 = reg1;
@@ -277,7 +275,44 @@ function nextInstruction() {
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
   }
   else if(ir == 9){ //cmp
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    ro0 = reg1;
+
+    var reg2 = memoria[pc] & 0x1C0000;
+    reg2 = reg2 >> 18;
+    ro1 = reg2;
     
+    /* ********************************** */
+    if(registradores[ro0] == registradores[ro1]) {
+      e = 1;
+      document.getElementById("e").value = e;
+    }
+    else {
+      e = 0;
+      document.getElementById("e").value = e;
+    }
+       
+    /* ********************************** */
+    if(registradores[ro0] < registradores[ro1]) {
+      l = 1;
+      document.getElementById("l").value = l;
+    }
+    else {
+      l = 0;
+      document.getElementById("l").value = l;
+    }
+
+    /* ********************************** */
+    if(registradores[ro0] > registradores[ro1]) {
+      g = 1;
+      document.getElementById("g").value = g;
+    }
+    else {
+      l = 0;
+      document.getElementById("g").value = g;
+    }
+
   }
   else if(ir == 10){ //je
   }

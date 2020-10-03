@@ -157,6 +157,12 @@
   margin-top: 5px;
 }
 
+.row-cpu-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .row-cpu div {
   margin-right: 20px;
 }
