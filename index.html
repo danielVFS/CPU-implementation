@@ -16,9 +16,15 @@
     <h1 class="title">Painel de Programação</h1>
     <div class="display">
       <div class="painel">
-        <textarea name="textAreaOriginal" id="textAreaOriginal" placeholder="Digite seu código"></textarea>
+        <div class="textArea">
+          <span>Digite seu Texto para analisarmos</span>
+          <textarea name="textAreaOriginal" id="textAreaOriginal"></textarea>
+        </div>
         <div class="espaçador"></div>
-        <textarea name="textAreaConvertido" id="textAreaConvertido" placeholder="O código convertido saíra aqui" readonly></textarea>
+        <div class="textArea">
+          <span>Deu tudo certo</span>
+          <textarea name="textAreaConvertido" id="textAreaConvertido" readonly></textarea>
+        </div>
       </div>
       <div class="actions">
         <input type="button" value="Converter" id="conversor" onclick="converter()">

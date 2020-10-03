@@ -210,8 +210,8 @@ function nextInstruction() {
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro0] + registradores[ro1];
-    mbr = registradores[ro0];
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(mbr.toString(16).toUpperCase(), 8);
+    //mbr = registradores[ro0];
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
   }
   else if(ir == 4) { //sub
     // não sei oq fazer no mar nesse caso
@@ -225,8 +225,8 @@ function nextInstruction() {
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro0] - registradores[ro1];
-    mbr = registradores[ro0];
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(mbr.toString(16).toUpperCase(), 8);
+    //mbr = registradores[ro0];
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
   }
   else if(ir == 5) { //mul
     // não sei oq fazer no mar nesse caso
@@ -240,8 +240,8 @@ function nextInstruction() {
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro0] * registradores[ro1];
-    mbr = registradores[ro0];
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(mbr.toString(16).toUpperCase(), 8);
+    //mbr = registradores[ro0];
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
   }
   else if(ir == 6) { //div
     // não sei oq fazer no mar nesse caso
@@ -255,22 +255,85 @@ function nextInstruction() {
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro0] / registradores[ro1];
-    mbr = registradores[ro0];
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(mbr.toString(16).toUpperCase(), 8);
+    //mbr = registradores[ro0];
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
+  }
+  else if(ir == 7){ //lsh
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    imm = memoria[pc] & 0x1FFFFF;
+    
+    registradores[reg1] = registradores[reg1] << imm;
+
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+  }
+  else if(ir == 8){ //rsh
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    imm = memoria[pc] & 0x1FFFFF;
+    
+    registradores[reg1] = registradores[reg1] >> imm;
+
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+  }
+  else if(ir == 9){ //cmp
+    
+  }
+  else if(ir == 10){ //je
+  }
+  else if(ir == 11){ //jne
+    
+  }
+  else if(ir == 12){ //jl
+    
+  }
+  else if(ir == 13){ //jle
+    
+  }
+  else if(ir == 14){ //jg
+    
+  }
+  else if(ir == 15){ //jge
+    
+  }
+  else if(ir == 16){ //jmp
+    
+  }
+  else if(ir == 17){ //movih
+    
+  }
+  else if(ir == 18){ //movil
+    
+  }
+  else if(ir == 19){ //addi
+    
+  }
+  else if(ir == 20){ //subi
+    
+  }
+  else if(ir == 21){ //mult
+    
+  }
+  else if(ir == 22){ //divi
+    
+  }
+  else if(ir == 23){ //movrr
+    
   }
 
   pc++;
-  atualizarProcessador(ir, mar, mbr, pc, ro0, ro1);
+  atualizarProcessador(ir, mar, mbr, pc, ro0, ro1, imm);
 }
 
 // atualizando o processador a cada ciclo
-function atualizarProcessador(ir, mar, mbr, pc, ro0, ro1) {
+function atualizarProcessador(ir, mar, mbr, pc, ro0, ro1, imm) {
   document.getElementById("ir").value = preencherBits(ir.toString(16).toUpperCase(), 2);
   document.getElementById("mar").value = preencherBits(mar.toString(16).toUpperCase(), 8);
   document.getElementById("mbr").value = preencherBits(mbr.toString(16).toUpperCase(), 8);
   document.getElementById("pc").value = preencherBits(pc.toString(16).toUpperCase(), 8);
   document.getElementById("ro0").value = preencherBits(ro0.toString(16).toUpperCase(), 3);
   document.getElementById("ro1").value = preencherBits(ro1.toString(16).toUpperCase(), 3);
+  document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 4);
 }
 
 // Map de opcodes convertidos para hexa
