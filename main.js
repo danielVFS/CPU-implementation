@@ -360,10 +360,14 @@ function nextInstruction() {
     pc = mar-1; 
   }
   else if(ir == 17){ //movih
-    
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    imm = memoria[pc] & 0x1FFFFF;
   }
   else if(ir == 18){ //movil
-    
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    imm = memoria[pc] & 0x1FFFFF;
   }
   else if(ir == 19){ //addi
     var reg1 = memoria[pc] & 0xE00000;
@@ -398,9 +402,19 @@ function nextInstruction() {
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
   }
   else if(ir == 23){ //movrr
-    
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    ro0 = reg1;
+
+    var reg2 = memoria[pc] & 0x1C0000;
+    reg2 = reg2 >> 18;
+    ro1 = reg2;
+
+    registradores[ro0] = registradores[ro1];
+    document.getElementById(`${decToReg.get(ro0)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
   }
 
+  // incrementa o contador quando um ciclo termina
   pc++;
   atualizarProcessador(ir, mar, mbr, pc, ro0, ro1, imm);
 }
