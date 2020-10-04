@@ -193,6 +193,11 @@ function nextInstruction() {
   }
   else if(ir == 2) { //st
     mar = memoria[pc] & 0x1FFFFF;
+    
+    var reg = memoria[pc] & 0xE00000;
+    reg = reg >> 21
+    ro0 = reg;
+    
     mbr = registradores[ro0];
     memoria[mar] = mbr;
 
@@ -260,7 +265,7 @@ function nextInstruction() {
     var reg1 = memoria[pc] & 0xE00000;
     reg1 = reg1 >> 21;
     imm = memoria[pc] & 0x1FFFFF;
-    
+  
     registradores[reg1] = registradores[reg1] << imm;
 
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
@@ -361,16 +366,36 @@ function nextInstruction() {
     
   }
   else if(ir == 19){ //addi
-    
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    imm = memoria[pc] & 0x1FFFFF;
+  
+    registradores[reg1] = registradores[reg1] + imm;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
   }
   else if(ir == 20){ //subi
-    
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    imm = memoria[pc] & 0x1FFFFF;
+  
+    registradores[reg1] = registradores[reg1] - imm;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
   }
-  else if(ir == 21){ //mult
-    
+  else if(ir == 21){ //muli
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    imm = memoria[pc] & 0x1FFFFF;
+  
+    registradores[reg1] = registradores[reg1] * imm;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
   }
   else if(ir == 22){ //divi
-    
+    var reg1 = memoria[pc] & 0xE00000;
+    reg1 = reg1 >> 21;
+    imm = memoria[pc] & 0x1FFFFF;
+  
+    registradores[reg1] = registradores[reg1] / imm;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
   }
   else if(ir == 23){ //movrr
     
