@@ -269,6 +269,7 @@ function nextInstruction() {
     registradores[reg1] = registradores[reg1] << imm;
 
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
   }
   else if(ir == 8){ //rsh
     var reg1 = memoria[pc] & 0xE00000;
@@ -278,6 +279,7 @@ function nextInstruction() {
     registradores[reg1] = registradores[reg1] >> imm;
 
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
   }
   else if(ir == 9){ //cmp
     var reg1 = memoria[pc] & 0xE00000;
@@ -361,13 +363,36 @@ function nextInstruction() {
   }
   else if(ir == 17){ //movih
     var reg1 = memoria[pc] & 0xE00000;
+
     reg1 = reg1 >> 21;
+
+    ro0 = reg1; // pegando o registrador onde está o valor
+    console.log(ro0);
+
     imm = memoria[pc] & 0x1FFFFF;
+
+    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);  
+
+    imm = imm << 16;
+    reg1 = reg1 & 0xFFFF;
+
+    reg1 = reg1 | imm;
+
+    registradores[ro0] = reg1;
+
+    document.getElementById(`${decToReg.get(ro0)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
   }
   else if(ir == 18){ //movil
     var reg1 = memoria[pc] & 0xE00000;
     reg1 = reg1 >> 21;
-    imm = memoria[pc] & 0x1FFFFF;
+    imm = memoria[pc] & 0x1FFFFF; // apenas decodificando
+
+    imm = imm & 0xFFFF;
+
+    registradores[reg1] = imm;
+    
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
   }
   else if(ir == 19){ //addi
     var reg1 = memoria[pc] & 0xE00000;
@@ -376,6 +401,7 @@ function nextInstruction() {
   
     registradores[reg1] = registradores[reg1] + imm;
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
   }
   else if(ir == 20){ //subi
     var reg1 = memoria[pc] & 0xE00000;
@@ -384,6 +410,7 @@ function nextInstruction() {
   
     registradores[reg1] = registradores[reg1] - imm;
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
   }
   else if(ir == 21){ //muli
     var reg1 = memoria[pc] & 0xE00000;
@@ -392,6 +419,7 @@ function nextInstruction() {
   
     registradores[reg1] = registradores[reg1] * imm;
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
   }
   else if(ir == 22){ //divi
     var reg1 = memoria[pc] & 0xE00000;
@@ -400,6 +428,7 @@ function nextInstruction() {
   
     registradores[reg1] = registradores[reg1] / imm;
     document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
+    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
   }
   else if(ir == 23){ //movrr
     var reg1 = memoria[pc] & 0xE00000;
@@ -416,6 +445,7 @@ function nextInstruction() {
 
   // incrementa o contador quando um ciclo termina
   pc++;
+
   atualizarProcessador(ir, mar, mbr, pc, ro0, ro1, imm);
 }
 
