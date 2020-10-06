@@ -42,7 +42,7 @@ function converter() {
 
       // no caso de ser o hlt
       if(aux[1] == null) {
-        instructionWord = 0; // fazendo isso devido a alguns bugs no map
+        instructionWord = 0;
         //console.log(instructionWord);
       } 
       else if(aux[2] == null) { // em casos onde se tem apenas o opcode e a instrução
@@ -93,7 +93,7 @@ function converter() {
           reg0 = reg0 + mascReg0;
           reg0 = reg0 << 21;
 
-          imm = parseInt(aux[2], 16); // deve ser passado para o hexa ???????????
+          imm = parseInt(aux[2], 16);
           imm = imm & mascAdress; // utilizando a mesma mascara do endereço de memória
 
           instructionWord = (opcode + reg0 + imm);
