@@ -178,7 +178,7 @@ function nextInstruction() {
   ir = ir >> 24;
 
   if(ir == 0) { //hlt
-    mbr = mar = ro0 = ir = imm = ro1 = 0;
+    return;
   } 
   else if(ir == 1) { //ld
     mar = memoria[pc] & 0x1FFFFF;

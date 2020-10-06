@@ -47,8 +47,7 @@
 }
 
 #textAreaOriginal {
-  background: url("/assets/analise.jpg") center no-repeat ;
-  background-size: 100%;
+  
   color: red;
   
   width: 250px;
@@ -61,8 +60,7 @@
 }
 
 #textAreaConvertido {
-  background: url("/assets/emoji.jpg") center no-repeat ;
-  background-size: 100%;
+  
   color: red;
   
   width: 250px;
