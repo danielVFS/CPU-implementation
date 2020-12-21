@@ -62,7 +62,7 @@ function converter() {
           memoryAddress = parseInt(aux[2], 16); // passando para hexa
           memoryAddress = memoryAddress & mascAdress;
 
-          //console.log(`${opcode} + ${reg0} + ${memoryAddress}`);
+          console.log(`${opcode} + ${reg0} + ${memoryAddress}`);
 
           instructionWord = (opcode | reg0 | memoryAddress);
           //console.log(instructionWord);
