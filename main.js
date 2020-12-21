@@ -1,6 +1,7 @@
 // declarando variaveis
 // testando funcionalidade do git
 // adicionando mais uma linha para teste
+// Criando nova funcionalidade
 
 var memoria = [];
 var pc = 0;
