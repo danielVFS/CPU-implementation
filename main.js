@@ -2,7 +2,7 @@
 // testando funcionalidade do git
 // adicionando mais uma linha para teste
 // Criando nova funcionalidade
-
+// Novo comentario
 var memoria = [];
 var pc = 0;
 var mbr;
