@@ -1,3 +1,4 @@
+// declarando variaveis
 // testando funcionalidade do git
 
 var memoria = [];
