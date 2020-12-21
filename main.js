@@ -1,3 +1,6 @@
+// declarando variaveis
+// testando funcionalidade do git
+
 var memoria = [];
 var pc = 0;
 var mbr;
@@ -15,9 +18,9 @@ var l;
 var g;
 
 // mascaras
-var mascReg0 = 0xE00000;
-var mascReg1 = 0x1C0000;  
-var mascAdress = 0x1FFFFF;
+var mascReg0 = 0xe00000;
+var mascReg1 = 0x1c0000;
+var mascAdress = 0x1fffff;
 
 // conversões OK - Testadas com sucesso
 // função para converter o valor do textarea
@@ -32,7 +35,7 @@ function converter() {
   var imm;
 
   for (const instruction of instructions) {
-    if(instruction != null) {
+    if (instruction != null) {
       var aux = instruction.split(" ");
       var opcode = aux[0];
 
@@ -41,20 +44,19 @@ function converter() {
       opcode = opcode << 24; // deslocando 24 bits;
 
       // no caso de ser o hlt
-      if(aux[1] == null) {
+      if (aux[1] == null) {
         instructionWord = 0;
         //console.log(instructionWord);
-      } 
-      else if(aux[2] == null) { // em casos onde se tem apenas o opcode e a instrução
+      } else if (aux[2] == null) {
+        // em casos onde se tem apenas o opcode e a instrução
         memoryAddress = parseInt(aux[1], 16); // passando para hexa
         memoryAddress = memoryAddress & mascAdress;
 
-        instructionWord = (opcode | memoryAddress); // formando a instrução
-      } 
-      else {
+        instructionWord = opcode | memoryAddress; // formando a instrução
+      } else {
         // em caso de ser ld ou st, onde se tem um registrador
-        if(opcode == 0x01 << 24 || opcode == 0x02 << 24) {
-          reg0 = aux[1].slice(0,2); // eliminando a virgula
+        if (opcode == 0x01 << 24 || opcode == 0x02 << 24) {
+          reg0 = aux[1].slice(0, 2); // eliminando a virgula
           reg0 = regToDec.get(reg0);
           reg0 = reg0 << 21; // deslocando para pegar o valor do reg
           reg0 = reg0 & mascReg0;
@@ -64,26 +66,30 @@ function converter() {
 
           console.log(`${opcode} + ${reg0} + ${memoryAddress}`);
 
-          instructionWord = (opcode | reg0 | memoryAddress);
+          instructionWord = opcode | reg0 | memoryAddress;
           //console.log(instructionWord);
         }
         // em casos de add, sub, mul, div, cmp
-        else if(opcode > 0x02 << 24 && opcode < 0x07 << 24|| opcode == 0x09 << 24 || opcode == 0x17 << 24){
-          reg0 = aux[1].slice(0,2); // eliminando a virgula
-          reg1 = aux[2].slice(0,2); // eliminando a virgula
+        else if (
+          (opcode > 0x02 << 24 && opcode < 0x07 << 24) ||
+          opcode == 0x09 << 24 ||
+          opcode == 0x17 << 24
+        ) {
+          reg0 = aux[1].slice(0, 2); // eliminando a virgula
+          reg1 = aux[2].slice(0, 2); // eliminando a virgula
           reg0 = regToDec.get(reg0);
           reg1 = regToDec.get(reg1);
 
           reg0 = reg0 + mascReg0;
           reg1 = reg1 + mascReg1;
-      
+
           // deslocando
           reg0 = reg0 << 21;
           reg1 = reg1 << 18;
-          
+
           //console.log(`${opcode} + ${reg0} + ${reg1}`);
 
-          instructionWord = (opcode | reg0 | reg1);
+          instructionWord = opcode | reg0 | reg1;
           //console.log(instructionWord);
         }
         // em casos de lsh, rsh, movih, movil, addi, subi, muli, divi, movrr
@@ -96,45 +102,47 @@ function converter() {
           imm = parseInt(aux[2], 16);
           imm = imm & mascAdress; // utilizando a mesma mascara do endereço de memória
 
-          instructionWord = (opcode + reg0 + imm);
+          instructionWord = opcode + reg0 + imm;
         }
       }
 
       // convertendo para string apenas para mostrar na tela
       var visualInstruction = instructionWord;
-      visualInstruction = preencherBits(instructionWord.toString(16).toUpperCase(), 8);
-      
+      visualInstruction = preencherBits(
+        instructionWord.toString(16).toUpperCase(),
+        8
+      );
+
       // apenas para mostrar no text area
       acumulator = acumulator + visualInstruction + "\n";
-
     }
   }
 
-  document.getElementById('textAreaConvertido').value = acumulator;
+  document.getElementById("textAreaConvertido").value = acumulator;
 }
 
 // Funçaõ responsável por colocar os valores convertidos para a memória
 function submeter() {
-  var instruction = document.getElementById('textAreaConvertido').value;
+  var instruction = document.getElementById("textAreaConvertido").value;
   var instructions = instruction.split("\n");
 
   // contador auxiliar para gravar na memória
   var contador = 0;
 
   instructions.forEach((instruction) => {
-    if(instruction != "") {
+    if (instruction != "") {
       var input = document.getElementById(`${contador}`);
-     
+
       input.value = instruction;
       memoria[contador] = parseInt(instruction, 16);
-      contador++;   
-    }   
+      contador++;
+    }
   });
 }
 
 // funçaõ para preencher com 0s onde está incompleto
 function preencherBits(param, bits) {
-  while(param.length < bits) {
+  while (param.length < bits) {
     param = 0 + param;
   }
 
@@ -145,27 +153,25 @@ function preencherBits(param, bits) {
 // mostra o valor na tela e adiciona na memoria
 function changeMenu() {
   var input = event.target;
-  var visualValue; 
+  var visualValue;
   var virtualValue;
 
   // em caso de usuário não preencher algum valor;
-  if(!input.value) {
+  if (!input.value) {
     visualValue = "0";
     virtualValue = 0;
-  } 
-  else {
+  } else {
     visualValue = input.value.toUpperCase();
     virtualValue = parseInt(visualValue, 16);
   }
-  
+
   //console.log(`${visualValue} - ${virtualValue}`);
-  
+
   visualValue = preencherBits(visualValue, 8);
 
   input.value = visualValue;
   memoria[input.id] = virtualValue;
 }
-
 
 /*
   função para executar o ciclo da maquina
@@ -177,270 +183,336 @@ function nextInstruction() {
   ir = memoria[pc];
   ir = ir >> 24;
 
-  if(ir == 0) { //hlt
+  if (ir == 0) {
+    //hlt
     return;
-  } 
-  else if(ir == 1) { //ld
-    mar = memoria[pc] & 0x1FFFFF;
+  } else if (ir == 1) {
+    //ld
+    mar = memoria[pc] & 0x1fffff;
     mbr = memoria[mar];
 
-    var reg = memoria[pc] & 0xE00000;
+    var reg = memoria[pc] & 0xe00000;
     reg = reg >> 21;
-    
+
     ro0 = reg;
     registradores[reg] = mbr;
-    document.getElementById(`${decToReg.get(reg)}`).value = preencherBits(mbr.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 2) { //st
-    mar = memoria[pc] & 0x1FFFFF;
-    
-    var reg = memoria[pc] & 0xE00000;
-    reg = reg >> 21
+    document.getElementById(`${decToReg.get(reg)}`).value = preencherBits(
+      mbr.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 2) {
+    //st
+    mar = memoria[pc] & 0x1fffff;
+
+    var reg = memoria[pc] & 0xe00000;
+    reg = reg >> 21;
     ro0 = reg;
-    
+
     mbr = registradores[ro0];
     memoria[mar] = mbr;
 
-    document.getElementById(`${mar}`).value = preencherBits(mbr.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 3) { //add
+    document.getElementById(`${mar}`).value = preencherBits(
+      mbr.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 3) {
+    //add
     // não sei oq fazer no mar nesse caso
 
-    var reg1 = memoria[pc] & 0xE00000;
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
     ro0 = reg1;
 
-    var reg2 = memoria[pc] & 0x1C0000;
+    var reg2 = memoria[pc] & 0x1c0000;
     reg2 = reg2 >> 18;
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro0] + registradores[ro1];
     //mbr = registradores[ro0];
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 4) { //sub
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[ro0].toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 4) {
+    //sub
     // não sei oq fazer no mar nesse caso
 
-    var reg1 = memoria[pc] & 0xE00000;
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
     ro0 = reg1;
 
-    var reg2 = memoria[pc] & 0x1C0000;
+    var reg2 = memoria[pc] & 0x1c0000;
     reg2 = reg2 >> 18;
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro0] - registradores[ro1];
     //mbr = registradores[ro0];
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 5) { //mul
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[ro0].toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 5) {
+    //mul
     // não sei oq fazer no mar nesse caso
 
-    var reg1 = memoria[pc] & 0xE00000;
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
     ro0 = reg1;
 
-    var reg2 = memoria[pc] & 0x1C0000;
+    var reg2 = memoria[pc] & 0x1c0000;
     reg2 = reg2 >> 18;
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro0] * registradores[ro1];
     //mbr = registradores[ro0];
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 6) { //div
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[ro0].toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 6) {
+    //div
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
     ro0 = reg1;
 
-    var reg2 = memoria[pc] & 0x1C0000;
+    var reg2 = memoria[pc] & 0x1c0000;
     reg2 = reg2 >> 18;
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro0] / registradores[ro1];
     //mbr = registradores[ro0];
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 7){ //lsh
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[ro0].toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 7) {
+    //lsh
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
-    imm = memoria[pc] & 0x1FFFFF;
-  
+    imm = memoria[pc] & 0x1fffff;
+
     registradores[reg1] = registradores[reg1] << imm;
 
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
-    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 8){ //rsh
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[reg1].toString(16).toUpperCase(),
+      8
+    );
+    document.getElementById("imm").value = preencherBits(
+      imm.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 8) {
+    //rsh
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
-    imm = memoria[pc] & 0x1FFFFF;
-    
+    imm = memoria[pc] & 0x1fffff;
+
     registradores[reg1] = registradores[reg1] >> imm;
 
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
-    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 9){ //cmp
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[reg1].toString(16).toUpperCase(),
+      8
+    );
+    document.getElementById("imm").value = preencherBits(
+      imm.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 9) {
+    //cmp
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
     ro0 = reg1;
 
-    var reg2 = memoria[pc] & 0x1C0000;
+    var reg2 = memoria[pc] & 0x1c0000;
     reg2 = reg2 >> 18;
     ro1 = reg2;
-    
+
     /* ********************************** */
-    if(registradores[ro0] == registradores[ro1]) {
+    if (registradores[ro0] == registradores[ro1]) {
       e = 1;
       document.getElementById("e").value = e;
-    }
-    else {
+    } else {
       e = 0;
       document.getElementById("e").value = e;
     }
-       
+
     /* ********************************** */
-    if(registradores[ro0] < registradores[ro1]) {
+    if (registradores[ro0] < registradores[ro1]) {
       l = 1;
       document.getElementById("l").value = l;
-    }
-    else {
+    } else {
       l = 0;
       document.getElementById("l").value = l;
     }
 
     /* ********************************** */
-    if(registradores[ro0] > registradores[ro1]) {
+    if (registradores[ro0] > registradores[ro1]) {
       g = 1;
       document.getElementById("g").value = g;
-    }
-    else {
+    } else {
       g = 0;
       document.getElementById("g").value = g;
     }
-
-  }
-  else if(ir == 10){ //je
-    if(e == 1) {
-      mar = memoria[pc] & 0x1FFFFF;
-      pc = mar-1;
+  } else if (ir == 10) {
+    //je
+    if (e == 1) {
+      mar = memoria[pc] & 0x1fffff;
+      pc = mar - 1;
     }
-  }
-  else if(ir == 11){ //jne
-    if(e == 0) {
-      mar = memoria[pc] & 0x1FFFFF;
-      pc = mar-1;
+  } else if (ir == 11) {
+    //jne
+    if (e == 0) {
+      mar = memoria[pc] & 0x1fffff;
+      pc = mar - 1;
     }
-  }
-  else if(ir == 12){ //jl
-    if(l == 1) {
-      mar = memoria[pc] & 0x1FFFFF;
-      pc = mar-1;
+  } else if (ir == 12) {
+    //jl
+    if (l == 1) {
+      mar = memoria[pc] & 0x1fffff;
+      pc = mar - 1;
     }
-  }
-  else if(ir == 13){ //jle
-    if(e == 1 || l == 1) {
-      mar = memoria[pc] & 0x1FFFFF;
-      pc = mar-1;
+  } else if (ir == 13) {
+    //jle
+    if (e == 1 || l == 1) {
+      mar = memoria[pc] & 0x1fffff;
+      pc = mar - 1;
     }
-  }
-  else if(ir == 14){ //jg
-    if(g == 1) {
-      mar = memoria[pc] & 0x1FFFFF;
-      pc = mar-1;
+  } else if (ir == 14) {
+    //jg
+    if (g == 1) {
+      mar = memoria[pc] & 0x1fffff;
+      pc = mar - 1;
     }
-  }
-  else if(ir == 15){ //jge
-    if(e == 1 || g == 1) {
-      mar = memoria[pc] & 0x1FFFFF;
-      pc = mar-1;
-    } 
-  }
-  else if(ir == 16){ //jmp
-    mar = memoria[pc] & 0x1FFFFF;
-    pc = mar-1; 
-  }
-  else if(ir == 17){ //movih
-    var reg1 = memoria[pc] & 0xE00000;
+  } else if (ir == 15) {
+    //jge
+    if (e == 1 || g == 1) {
+      mar = memoria[pc] & 0x1fffff;
+      pc = mar - 1;
+    }
+  } else if (ir == 16) {
+    //jmp
+    mar = memoria[pc] & 0x1fffff;
+    pc = mar - 1;
+  } else if (ir == 17) {
+    //movih
+    var reg1 = memoria[pc] & 0xe00000;
 
     reg1 = reg1 >> 21;
 
     ro0 = reg1; // pegando o registrador onde está o valor
     console.log(ro0);
 
-    imm = memoria[pc] & 0x1FFFFF;
+    imm = memoria[pc] & 0x1fffff;
 
-    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);  
+    document.getElementById("imm").value = preencherBits(
+      imm.toString(16).toUpperCase(),
+      8
+    );
 
     imm = imm << 16;
-    reg1 = reg1 & 0xFFFF;
+    reg1 = reg1 & 0xffff;
 
     reg1 = reg1 | imm;
 
     registradores[ro0] = reg1;
 
-    document.getElementById(`${decToReg.get(ro0)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 18){ //movil
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(ro0)}`).value = preencherBits(
+      registradores[ro0].toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 18) {
+    //movil
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
-    imm = memoria[pc] & 0x1FFFFF; // apenas decodificando
+    imm = memoria[pc] & 0x1fffff; // apenas decodificando
 
-    imm = imm & 0xFFFF;
+    imm = imm & 0xffff;
 
     registradores[reg1] = imm;
-    
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
-    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 19){ //addi
-    var reg1 = memoria[pc] & 0xE00000;
+
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[reg1].toString(16).toUpperCase(),
+      8
+    );
+    document.getElementById("imm").value = preencherBits(
+      imm.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 19) {
+    //addi
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
-    imm = memoria[pc] & 0x1FFFFF;
-  
+    imm = memoria[pc] & 0x1fffff;
+
     registradores[reg1] = registradores[reg1] + imm;
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
-    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 20){ //subi
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[reg1].toString(16).toUpperCase(),
+      8
+    );
+    document.getElementById("imm").value = preencherBits(
+      imm.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 20) {
+    //subi
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
-    imm = memoria[pc] & 0x1FFFFF;
-  
+    imm = memoria[pc] & 0x1fffff;
+
     registradores[reg1] = registradores[reg1] - imm;
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
-    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 21){ //muli
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[reg1].toString(16).toUpperCase(),
+      8
+    );
+    document.getElementById("imm").value = preencherBits(
+      imm.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 21) {
+    //muli
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
-    imm = memoria[pc] & 0x1FFFFF;
-  
+    imm = memoria[pc] & 0x1fffff;
+
     registradores[reg1] = registradores[reg1] * imm;
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
-    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 22){ //divi
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[reg1].toString(16).toUpperCase(),
+      8
+    );
+    document.getElementById("imm").value = preencherBits(
+      imm.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 22) {
+    //divi
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
-    imm = memoria[pc] & 0x1FFFFF;
-  
+    imm = memoria[pc] & 0x1fffff;
+
     registradores[reg1] = registradores[reg1] / imm;
-    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(registradores[reg1].toString(16).toUpperCase(), 8);
-    document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 8);
-  }
-  else if(ir == 23){ //movrr
-    var reg1 = memoria[pc] & 0xE00000;
+    document.getElementById(`${decToReg.get(reg1)}`).value = preencherBits(
+      registradores[reg1].toString(16).toUpperCase(),
+      8
+    );
+    document.getElementById("imm").value = preencherBits(
+      imm.toString(16).toUpperCase(),
+      8
+    );
+  } else if (ir == 23) {
+    //movrr
+    var reg1 = memoria[pc] & 0xe00000;
     reg1 = reg1 >> 21;
     ro0 = reg1;
 
-    var reg2 = memoria[pc] & 0x1C0000;
+    var reg2 = memoria[pc] & 0x1c0000;
     reg2 = reg2 >> 18;
     ro1 = reg2;
 
     registradores[ro0] = registradores[ro1];
-    document.getElementById(`${decToReg.get(ro0)}`).value = preencherBits(registradores[ro0].toString(16).toUpperCase(), 8);
+    document.getElementById(`${decToReg.get(ro0)}`).value = preencherBits(
+      registradores[ro0].toString(16).toUpperCase(),
+      8
+    );
   }
 
   // incrementa o contador quando um ciclo termina
@@ -451,13 +523,34 @@ function nextInstruction() {
 
 // atualizando o processador a cada ciclo
 function atualizarProcessador(ir, mar, mbr, pc, ro0, ro1, imm) {
-  document.getElementById("ir").value = preencherBits(ir.toString(16).toUpperCase(), 2);
-  document.getElementById("mar").value = preencherBits(mar.toString(16).toUpperCase(), 8);
-  document.getElementById("mbr").value = preencherBits(mbr.toString(16).toUpperCase(), 8);
-  document.getElementById("pc").value = preencherBits(pc.toString(16).toUpperCase(), 8);
-  document.getElementById("ro0").value = preencherBits(ro0.toString(16).toUpperCase(), 3);
-  document.getElementById("ro1").value = preencherBits(ro1.toString(16).toUpperCase(), 3);
-  document.getElementById("imm").value = preencherBits(imm.toString(16).toUpperCase(), 4);
+  document.getElementById("ir").value = preencherBits(
+    ir.toString(16).toUpperCase(),
+    2
+  );
+  document.getElementById("mar").value = preencherBits(
+    mar.toString(16).toUpperCase(),
+    8
+  );
+  document.getElementById("mbr").value = preencherBits(
+    mbr.toString(16).toUpperCase(),
+    8
+  );
+  document.getElementById("pc").value = preencherBits(
+    pc.toString(16).toUpperCase(),
+    8
+  );
+  document.getElementById("ro0").value = preencherBits(
+    ro0.toString(16).toUpperCase(),
+    3
+  );
+  document.getElementById("ro1").value = preencherBits(
+    ro1.toString(16).toUpperCase(),
+    3
+  );
+  document.getElementById("imm").value = preencherBits(
+    imm.toString(16).toUpperCase(),
+    4
+  );
 }
 
 // Map de opcodes convertidos para hexa
@@ -472,12 +565,12 @@ var opcodeToHexa = new Map([
   ["lsh", 0x07],
   ["rsh", 0x08],
   ["cmp", 0x09],
-  ["je", 0x0A],
-  ["jne", 0x0B],
-  ["jl", 0x0C],
-  ["jle", 0x0D],
-  ["jg", 0x0E],
-  ["jge", 0x0F],
+  ["je", 0x0a],
+  ["jne", 0x0b],
+  ["jl", 0x0c],
+  ["jle", 0x0d],
+  ["jg", 0x0e],
+  ["jge", 0x0f],
   ["jmp", 0x10],
   ["movih", 0x11],
   ["movil", 0x12],
@@ -511,4 +604,3 @@ var decToReg = new Map([
   [6, "r6"],
   [7, "r7"],
 ]);
-
