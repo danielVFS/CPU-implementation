@@ -3,6 +3,8 @@
 // adicionando mais uma linha para teste
 // Criando nova funcionalidade
 
+//testando em um computador novo
+
 var memoria = [];
 var pc = 0;
 var mbr;
