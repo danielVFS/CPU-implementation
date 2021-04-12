@@ -3,6 +3,8 @@
 // adicionando mais uma linha para teste
 // Criando nova funcionalidade
 
+//Rafael esteve aqui
+
 //testando em um computador novo
 
 var memoria = [];
