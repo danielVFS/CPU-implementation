@@ -4,6 +4,7 @@
 // Criando nova funcionalidade
 
 //Rafael esteve aqui
+// Novo comentário para o rafael testar
 
 //testando em um computador novo
 
