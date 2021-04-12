@@ -17,6 +17,7 @@ var ro0;
 var ro1;
 var imm;
 var acc;
+var hugo;
 
 var registradores = new Array(8);
 
